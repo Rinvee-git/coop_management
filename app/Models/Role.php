@@ -6,12 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-        protected $primaryKey = 'roles_id';
-
+    // Use default primary key `id` created by the permissions migration
     protected $fillable = ['name'];
 
     public function profiles()
     {
-        return $this->hasMany(Profile::class, 'roles_id', 'roles_id');
+        return $this->hasMany(Profile::class, 'roles_id', 'id');
     }
 }

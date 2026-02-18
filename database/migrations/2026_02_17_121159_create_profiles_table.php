@@ -25,7 +25,7 @@ return new class extends Migration
         $table->string('address', 255)->nullable();
 
         $table->foreignId('roles_id')
-            ->constrained('roles', 'roles_id');
+            ->constrained('roles');
 
         $table->timestamps();
     });

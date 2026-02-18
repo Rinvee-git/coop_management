@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Traits\HasRoles;
 
 class Profile extends Model
 {
+    use HasRoles;
         protected $primaryKey = 'profile_id';
 
     protected $fillable = [
@@ -20,7 +22,7 @@ class Profile extends Model
 
      public function role()
     {
-        return $this->belongsTo(Role::class, 'roles_id', 'roles_id');
+        return $this->belongsTo(Role::class, 'roles_id', 'id');
     }
 
         public function getFullNameAttribute(): string

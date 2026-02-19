@@ -1,27 +1,26 @@
 <?php
 
-namespace App\Filament\Resources\Users\Tables;
+namespace App\Filament\Resources\MemberDetails\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\TextColumn;
 
-class UsersTable
+class MemberDetailsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('user_id')->sortable(),
-                TextColumn::make('username')->searchable()->sortable(),
-                TextColumn::make('profile_id')->sortable(),
+                //
             ])
             ->filters([
                 //
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([

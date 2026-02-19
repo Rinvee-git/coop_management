@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Users\Tables;
+namespace App\Filament\Resources\MembershipTypes\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -8,16 +8,29 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 
-class UsersTable
+class MembershipTypesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('user_id')->sortable(),
-                TextColumn::make('username')->searchable()->sortable(),
-                TextColumn::make('profile_id')->sortable(),
-            ])
+                TextColumn::make('membership_type_id')
+                ->label('ID')
+                ->sortable(),
+
+            TextColumn::make('name')
+                ->searchable()
+                ->sortable(),
+
+            TextColumn::make('description')
+                ->limit(50),
+
+            TextColumn::make('created_at')
+                ->dateTime()
+                ->sortable(),
+        ])
+        ->defaultSort('membership_type_id', 'desc')
+            
             ->filters([
                 //
             ])

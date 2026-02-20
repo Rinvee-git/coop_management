@@ -20,6 +20,12 @@ class WhatsNewResource extends Resource
 {
     protected static ?string $model = WhatsNew::class;
 
+    protected static ?string $navigationLabel = "What's New";
+
+    protected static ?string $modelLabel = "What's New";
+
+    protected static ?string $pluralModelLabel = "What's New";
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema

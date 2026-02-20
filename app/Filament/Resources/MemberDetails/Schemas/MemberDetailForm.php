@@ -29,7 +29,8 @@ class MemberDetailForm
 
                     Select::make('branch_id')
                         ->relationship('branch', 'name')
-                        ->label('Branch')
+                        ->default(fn () => auth()->user()?->branchId())
+                        ->disabled(fn () => auth()->user()?->isStaff())
                         ->required(),
 
                     Select::make('status')

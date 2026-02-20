@@ -10,6 +10,7 @@ use App\Filament\Resources\MemberDetails\Schemas\MemberDetailForm;
 use App\Filament\Resources\MemberDetails\Schemas\MemberDetailInfolist;
 use App\Filament\Resources\MemberDetails\Tables\MemberDetailsTable;
 use App\Models\MemberDetail;
+use Illuminate\Database\Eloquent\Builder;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -45,6 +46,21 @@ class MemberDetailResource extends Resource
             //
         ];
     }
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = auth()->user();
+
+        // If user is staff, restrict to their branch
+        if ($user && $user->isStaff() && $user->branchId()) {
+            $query->where('branch_id', $user->branchId());
+        }
+
+        return $query;
+    }
+
+    
 
     public static function getPages(): array
     {

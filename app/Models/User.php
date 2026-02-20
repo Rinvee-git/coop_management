@@ -71,4 +71,20 @@ class User extends Authenticatable
         $key = $this->getKey();
         return $key ? ('User #' . $key) : 'User';
     }
+
+    public function staffDetail()
+    {
+        return $this->hasOne(StaffDetail::class, 'profile_id', 'profile_id');
+    }
+
+    public function branchId(): ?int
+    {
+        return $this->staffDetail?->branch_id;
+    }
+
+    public function isStaff(): bool
+    {
+        return $this->staffDetail !== null;
+    }
+    
 }

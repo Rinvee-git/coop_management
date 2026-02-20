@@ -4,7 +4,7 @@ namespace App\Filament\Resources\Profiles\Schemas;
 
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Select;
+use Filament\Schema\Components\Select;
 use Filament\Forms\Components\TextInput;
 
 class ProfileForm
@@ -49,6 +49,11 @@ class ProfileForm
                     ->searchable()
                     ->preload()
                     ->required(),
+
+                TextColumn::make('system_roles')
+                    ->label('System Role')
+                    ->badge(),
+
                             ]);
     }
 }

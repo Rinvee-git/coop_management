@@ -20,6 +20,16 @@ class Profile extends Model
         return $this->hasOne(User::class, 'profile_id', 'profile_id');
     }
 
+    public function memberDetail()
+    {
+        return $this->hasOne(MemberDetail::class, 'profile_id', 'profile_id');
+    }
+
+    public function staffDetail()
+    {
+        return $this->hasOne(StaffDetail::class, 'profile_id', 'profile_id');
+    }
+
      public function role()
     {
         return $this->belongsTo(Role::class, 'roles_id', 'id');
@@ -30,5 +40,19 @@ class Profile extends Model
         return trim("{$this->first_name} {$this->middle_name} {$this->last_name}");
     }
 
+    public function getSystemRolesAttribute(): string
+    {
+        $roles = [];
+
+        if ($this->memberDetail) {
+            $roles[] = 'Member';
+        }
+
+        if ($this->staffDetail) {
+            $roles[] = 'Staff';
+        }
+
+        return empty($roles) ? 'None' : implode(' / ', $roles);
+    }
 
 }

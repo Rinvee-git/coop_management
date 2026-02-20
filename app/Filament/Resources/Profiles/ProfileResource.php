@@ -22,7 +22,7 @@ class ProfileResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'User Management';
+    protected static string|\UnitEnum|null $navigationGroup = 'Roles and Permissions';
 
     public static function form(Schema $schema): Schema
     {

@@ -5,8 +5,9 @@ namespace App\Filament\Resources\MemberDetails\Schemas;
 use Filament\Schemas\Schema;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\FileUpload;
 use Saade\FilamentAutograph\Forms\Components\SignaturePad;
@@ -17,56 +18,87 @@ class MemberDetailForm
     {
         return $schema
             ->components([
-                 Section::make('Membership Info')
-                ->schema([
-                    TextInput::make('member_no')
-                        ->label('Member Number'),
+                 Section::make('Member + Membership Info')
+            ->schema([
+                Select::make('profile_id')
+                    ->label('Profile')
+                    ->relationship('profile', 'email')
+                    ->searchable()
+                    ->preload()
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->full_name . ' — ' . $record->email)
+                    ->required(),
 
-                    Select::make('membership_type_id')
-                        ->relationship('membershipType', 'name')
-                        ->label('Membership Type')
-                        ->required(),
+                TextInput::make('member_no')
+                    ->label('Member No.')
+                    ->maxLength(45),
 
-                    Select::make('branch_id')
-                        ->relationship('branch', 'name')
-                        ->label('Branch')
-                        ->required(),
+                Select::make('membership_type_id')
+                    ->label('Membership Type')
+                    ->relationship('membershipType', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
 
-                    Select::make('status')
-                        ->options([
-                            'Active' => 'Active',
-                            'Inactive' => 'Inactive',
-                            'Delinquent' => 'Delinquent',
-                        ])
-                        ->required(),
-                ])->columns(2),
+                Select::make('branch_id')
+                    ->label('Branch')
+                    ->relationship('branch', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->required(),
 
-            Section::make('Employment')
-                ->schema([
-                    TextInput::make('occupation'),
-                    TextInput::make('employer_name'),
-                    TextInput::make('monthly_income_range'),
-                ])->columns(3),
+                Select::make('status')
+                    ->options([
+                        'Active' => 'Active',
+                        'Inactive' => 'Inactive',
+                        'Delinquent' => 'Delinquent',
+                    ])
+                    ->required(),
+            ])
+            ->columns(2),
+
+        Section::make('Employment')
+            ->schema([
+                TextInput::make('occupation')->maxLength(100),
+                TextInput::make('employer_name')->maxLength(150),
+                TextInput::make('monthly_income_range')->maxLength(50),
+
+                // keep these if you still want them
+                Textarea::make('employment_info')
+                    ->rows(3)
+                    ->columnSpanFull(),
+
+                TextInput::make('monthly_income')
+                    ->numeric()
+                    ->prefix('₱')
+                    ->nullable(),
+            ])
+            ->columns(3),
 
             Section::make('Identification')
                 ->schema([
-                    TextInput::make('id_type'),
-                    TextInput::make('id_number'),
-                ])->columns(2),
+                    TextInput::make('id_type')->maxLength(50),
+                    TextInput::make('id_number')->maxLength(100),
+                ])
+                ->columns(2),
 
             Section::make('Emergency Contact')
                 ->schema([
-                    TextInput::make('emergency_full_name'),
-                    TextInput::make('emergency_phone'),
-                    TextInput::make('emergency_relationship'),
-                ])->columns(3),
+                    TextInput::make('emergency_full_name')->maxLength(150),
+                    TextInput::make('emergency_phone')->maxLength(50),
+                    TextInput::make('emergency_relationship')->maxLength(50),
+                ])
+                ->columns(3),
 
-            Section::make('Digital Signature')
+            Section::make('Signature')
                 ->schema([
+                    // TEMP: upload for now (we’ll swap to drawn signature later)
                     FileUpload::make('signature_path')
-                    ->label('Signature (upload for now)')
-                    ->directory('signatures')
-                    ->image()
+                        ->label('Signature (Upload for now)')
+                        ->disk('public')
+                        ->directory('signatures')
+                        ->image()
+                        ->imagePreviewHeight('120')
+                        ->nullable(),
 
                 ]),
             ]);

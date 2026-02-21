@@ -22,8 +22,6 @@ class WhatsNewResource extends Resource
 
     protected static ?string $navigationLabel = "What's New";
 
-    protected static ?string $modelLabel = "What's New";
-
     protected static ?string $pluralModelLabel = "What's New";
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;

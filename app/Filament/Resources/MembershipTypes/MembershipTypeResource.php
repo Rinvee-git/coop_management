@@ -22,6 +22,8 @@ class MembershipTypeResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    // protected static ?string $modelLabel = 'Manage Cities';
+
     public static function form(Schema $schema): Schema
     {
         return MembershipTypeForm::configure($schema);

@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Models\Profile;
+use App\Models\StaffDetail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -82,9 +88,39 @@ class User extends Authenticatable
         return $this->staffDetail?->branch_id;
     }
 
+    public function roleName(): ?string
+    {
+        return $this->profile?->role?->name; // profiles.roles_id -> roles.id (Spatie roles table)
+    }
+
     public function isStaff(): bool
     {
         return $this->staffDetail !== null;
     }
     
+
+    public function isAdmin(): bool
+    {
+        return $this->roleName() === 'Admin';
+    }
+
+    public function isBranchScoped(): bool
+    {
+        return in_array($this->roleName(), [
+            'Manager',
+            'Staff',
+            'Cashier',
+            'Account Officer',
+        ], true);
+    }
+
+    public function isMember(): bool
+    {
+        return $this->roleName() === 'Member';
+    }
+
+    public function canAccessBackOffice(): bool
+{
+    return ! $this->isMember(); // members should not access admin panel
+}
 }

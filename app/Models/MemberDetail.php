@@ -10,10 +10,22 @@ class MemberDetail extends Model
 
 
     protected $fillable = [
-        'profile_id',
-        'membership_type_id',
-        'branch_id',
-        'signature_path',
+            'profile_id',
+            'membership_type_id',
+            'branch_id',
+            'signature_path',
+            'member_no',
+            'employment_info',
+            'monthly_income',
+            'occupation',
+            'employer_name',
+            'monthly_income_range',
+            'id_type',
+            'id_number',
+            'emergency_full_name',
+            'emergency_phone',
+            'emergency_relationship',
+            'status',
     ];
 
         public function profile()

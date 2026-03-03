@@ -12,26 +12,31 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('member_details', function (Blueprint $table) {
-                $table->id('member_id');
+            $table->id('member_id');
 
-                $table->foreignId('profile_id')
-                    ->constrained('profiles', 'profile_id')
-                    ->cascadeOnDelete();
+            $table->foreignId('profile_id')
+                ->constrained('profiles', 'profile_id')
+                ->cascadeOnDelete();
 
-                $table->string('member_no', 45)->nullable();
-                $table->text('employment_info')->nullable();
-                $table->decimal('monthly_income', 14, 2)->nullable();
+            $table->string('member_no', 45)->nullable();
+            $table->text('employment_info')->nullable();
+            $table->decimal('monthly_income', 14, 2)->nullable();
 
-                $table->foreignId('membership_type_id')
-                    ->constrained('membership_type', 'membership_type_id');
+            // ADD THIS LINE:
+            $table->unsignedBigInteger('membership_type_id');
 
-                $table->foreignId('branch_id')
-                    ->constrained('branches', 'branch_id');
+            // THEN THE FOREIGN KEY:
+            $table->foreign('membership_type_id')
+                ->references('membership_type_id')
+                ->on('membership_types');
 
-                $table->enum('status', ['Active','Inactive','Delinquent'])->nullable();
+            $table->foreignId('branch_id')
+                ->constrained('branches', 'branch_id');
 
-                $table->timestamps();
-            });
+            $table->enum('status', ['Active','Inactive','Delinquent'])->nullable();
+
+            $table->timestamps();
+        });
 
     }
 

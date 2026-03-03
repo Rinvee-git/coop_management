@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\Profile;
 use App\Models\StaffDetail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Filament\Panel;
 
 class User extends Authenticatable
 {
@@ -90,8 +91,9 @@ class User extends Authenticatable
 
     public function roleName(): ?string
     {
-        return $this->profile?->role?->name; // profiles.roles_id -> roles.id (Spatie roles table)
+        return $this->profile?->role?->name;
     }
+
 
     public function isStaff(): bool
     {
@@ -99,24 +101,30 @@ class User extends Authenticatable
     }
     
 
-    public function isAdmin(): bool
+   public function isAdmin(): bool
     {
-        return $this->roleName() === 'Admin';
-    }
-
-    public function isBranchScoped(): bool
-    {
-        return in_array($this->roleName(), [
-            'Manager',
-            'Staff',
-            'Cashier',
-            'Account Officer',
-        ], true);
+        return $this->hasRole('Admin');
     }
 
     public function isMember(): bool
     {
-        return $this->roleName() === 'Member';
+        return $this->hasRole('Member');
+    }
+
+    public function isBranchScoped(): bool
+    {
+        return $this->hasAnyRole([
+            'Manager',
+            'Staff',
+            'Cashier',
+            'Account Officer',
+        ]);
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+     {
+        // if you only have one panel, just block Members here
+        return ! $this->hasRole('Member');
     }
 
     public function canAccessBackOffice(): bool

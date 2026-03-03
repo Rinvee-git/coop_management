@@ -46,18 +46,26 @@ class MemberDetailResource extends Resource
             //
         ];
     }
-    public static function getEloquentQuery(): Builder
+   public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-
         $user = auth()->user();
 
-        // If user is staff, restrict to their branch
-        if ($user && $user->isStaff() && $user->branchId()) {
-            $query->where('branch_id', $user->branchId());
+        if (! $user) {
+            return $query->whereRaw('1=0');
         }
 
-        return $query;
+        // Admin sees everything
+        if ($user->hasRole('Admin')) {
+            return $query;
+        }
+
+        // Branch-scoped roles must have a branch, otherwise show nothing
+        if (! $user->branchId()) {
+            return $query->whereRaw('1=0');
+        }
+
+        return $query->where('branch_id', $user->branchId());
     }
 
     

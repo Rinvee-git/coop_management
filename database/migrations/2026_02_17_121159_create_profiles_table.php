@@ -36,7 +36,8 @@ return new class extends Migration
      * Reverse the migrations.
      */
     public function down(): void
-    {
-        Schema::dropIfExists('profiles');
-    }
+{
+    Schema::dropIfExists('member_details'); // Drop dependent table first
+    Schema::dropIfExists('profiles');
+}
 };

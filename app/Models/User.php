@@ -14,6 +14,7 @@ use App\Models\Profile;
 use App\Models\StaffDetail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Filament\Panel;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -23,7 +24,7 @@ class User extends Authenticatable
      */
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable,HasRoles;
+    use HasFactory, HasApiTokens, Notifiable,HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -99,7 +100,7 @@ class User extends Authenticatable
     {
         return $this->staffDetail !== null;
     }
-    
+
 
    public function isAdmin(): bool
     {

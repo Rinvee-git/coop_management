@@ -12,6 +12,7 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Table;
 
 class StaffDetailResource extends Resource
@@ -37,6 +38,28 @@ class StaffDetailResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
+
+        if (! $user) {
+            return $query->whereRaw('1=0');
+        }
+
+        // Admin sees all branches
+        if ($user->hasRole('Admin')) {
+            return $query;
+        }
+
+        // Non-admin must be scoped; if no branch assigned => show nothing
+        if (! $user->branchId()) {
+            return $query->whereRaw('1=0');
+        }
+
+        return $query->where('branch_id', $user->branchId());
     }
 
     public static function getPages(): array

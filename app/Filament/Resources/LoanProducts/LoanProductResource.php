@@ -27,11 +27,11 @@ class LoanProductResource extends Resource
 {
     protected static ?string $model = LoanProduct::class;
 
-    protected static ?string $navigationLabel = 'Load Management';
+    protected static ?string $navigationLabel = 'Loan Management';
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-banknotes';
 
-    protected static ?string $recordTitleAttribute = 'no';
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
     {

@@ -4,9 +4,9 @@ namespace App\Filament\Resources\Profiles\Schemas;
 
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\DatePicker;
-use Filament\Schema\Components\Select;
 use Filament\Forms\Components\TextInput;
-
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
 class ProfileForm
 {
     public static function configure(Schema $schema): Schema

@@ -46,27 +46,27 @@ class MemberDetailResource extends Resource
             //
         ];
     }
-   public static function getEloquentQuery(): Builder
-    {
-        $query = parent::getEloquentQuery();
-        $user = auth()->user();
+//    public static function getEloquentQuery(): Builder
+//     {
+//         $query = parent::getEloquentQuery();
+//         $user = auth()->user();
 
-        if (! $user) {
-            return $query->whereRaw('1=0');
-        }
+//         if (! $user) {
+//             return $query->whereRaw('1=0');
+//         }
 
-        // Admin sees everything
-        if ($user->hasRole('Admin')) {
-            return $query;
-        }
+//         // Admin sees everything
+//         if ($user->hasRole('Admin')) {
+//             return $query;
+//         }
 
-        // Branch-scoped roles must have a branch, otherwise show nothing
-        if (! $user->branchId()) {
-            return $query->whereRaw('1=0');
-        }
+//         // Branch-scoped roles must have a branch, otherwise show nothing
+//         if (! $user->branchId()) {
+//             return $query->whereRaw('1=0');
+//         }
 
-        return $query->where('branch_id', $user->branchId());
-    }
+//         return $query->where('branch_id', $user->branchId());
+//     }
 
     
 

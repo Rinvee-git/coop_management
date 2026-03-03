@@ -56,50 +56,32 @@ class MemberDetailForm
             ->columns(2),
 
         Section::make('Employment')
-            ->schema([
-                TextInput::make('occupation')->maxLength(100),
-                TextInput::make('employer_name')->maxLength(150),
-                TextInput::make('monthly_income_range')->maxLength(50),
+    ->schema([
+        TextInput::make('employment_info'),
+        TextInput::make('monthly_income'),
+        TextInput::make('occupation'),
+        TextInput::make('employer_name'),
+        TextInput::make('monthly_income_range'),
+    ])
+    ->columns(3),
 
-                // keep these if you still want them
-                Textarea::make('employment_info')
-                    ->rows(3)
-                    ->columnSpanFull(),
+Section::make('Identification')
+    ->schema([
+        TextInput::make('id_type'),
+        TextInput::make('id_number'),
+    ]),
 
-                TextInput::make('monthly_income')
-                    ->numeric()
-                    ->prefix('₱')
-                    ->nullable(),
-            ])
-            ->columns(3),
+Section::make('Emergency Contact')
+    ->schema([
+        TextInput::make('emergency_full_name'),
+        TextInput::make('emergency_phone'),
+        TextInput::make('emergency_relationship'),
+    ]),
 
-            Section::make('Identification')
-                ->schema([
-                    TextInput::make('id_type')->maxLength(50),
-                    TextInput::make('id_number')->maxLength(100),
-                ])
-                ->columns(2),
-
-            Section::make('Emergency Contact')
-                ->schema([
-                    TextInput::make('emergency_full_name')->maxLength(150),
-                    TextInput::make('emergency_phone')->maxLength(50),
-                    TextInput::make('emergency_relationship')->maxLength(50),
-                ])
-                ->columns(3),
-
-            Section::make('Signature')
-                ->schema([
-                    // TEMP: upload for now (we’ll swap to drawn signature later)
-                    FileUpload::make('signature_path')
-                        ->label('Signature (Upload for now)')
-                        ->disk('public')
-                        ->directory('signatures')
-                        ->image()
-                        ->imagePreviewHeight('120')
-                        ->nullable(),
-
-                ]),
+Section::make('Signature')
+    ->schema([
+        FileUpload::make('signature_path'),
+    ]),
             ]);
     }
 }

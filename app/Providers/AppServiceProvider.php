@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use App\Auth\ProfileEmailUserProvider;
 use Illuminate\Support\Facades\Gate;
+use App\Models\ShareCapitalTransaction;
+use App\Observers\ShareCapitalTransactionObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,5 +31,7 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
+        // Register observer for Share Capital transactions
+        ShareCapitalTransaction::observe(ShareCapitalTransactionObserver::class);
     }
 }

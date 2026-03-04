@@ -11,20 +11,34 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Users table
         Schema::create('users', function (Blueprint $table) {
-            $table->id('user_id');
-
-            $table->string('username', 45)->nullable(); // optional
-            $table->string('password', 255);
+            $table->id();
+            $table->string('name'); // required
+            $table->string('email')->unique(); // required, unique
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
             $table->rememberToken();
-
-            $table->foreignId('profile_id')
-                ->constrained('profiles', 'profile_id')
-                ->cascadeOnDelete();
-
             $table->timestamps();
-                });
+        });
 
+        // Password reset tokens
+        Schema::create('password_reset_tokens', function (Blueprint $table) {
+            $table->id(); // primary key
+            $table->string('email')->index();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
+        });
+
+        // Sessions table
+        Schema::create('sessions', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->longText('payload');
+            $table->integer('last_activity')->index();
+        });
     }
 
     /**
@@ -32,6 +46,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('users');
     }
 };

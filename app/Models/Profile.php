@@ -41,19 +41,24 @@ class Profile extends Model
         return trim("{$this->first_name} {$this->middle_name} {$this->last_name}");
     }
 
-    public function getSystemRolesAttribute(): string
+    public function shareCapitalTransactions()
     {
-        $roles = [];
-
-        if ($this->memberDetail) {
-            $roles[] = 'Member';
-        }
-
-        if ($this->staffDetail) {
-            $roles[] = 'Staff';
-        }
-
-        return empty($roles) ? 'None' : implode(' / ', $roles);
+        return $this->hasMany(\App\Models\ShareCapitalTransaction::class, 'profile_id', 'profile_id');
     }
+
+    // public function getSystemRolesAttribute(): string
+    // {
+    //     $roles = [];
+
+    //     if ($this->memberDetail) {
+    //         $roles[] = 'Member';
+    //     }
+
+    //     if ($this->staffDetail) {
+    //         $roles[] = 'Staff';
+    //     }
+
+    //     return empty($roles) ? 'None' : implode(' / ', $roles);
+    // }
 
 }

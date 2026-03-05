@@ -26,6 +26,11 @@ class UserResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+     public static function getRecordRouteKeyName(): ?string
+    {
+        return 'user_id';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return UserForm::configure($schema);

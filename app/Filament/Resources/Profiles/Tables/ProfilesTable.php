@@ -14,10 +14,7 @@ class ProfilesTable
     {
         return $table
             ->columns([
-                TextColumn::make('profile_id')
-                    ->label('ID')
-                    ->sortable(),
-
+                
                 TextColumn::make('full_name')
                     ->label('Name')
                     ->getStateUsing(fn ($record) => $record->full_name)

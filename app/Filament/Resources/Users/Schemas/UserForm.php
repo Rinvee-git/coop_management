@@ -5,18 +5,21 @@ namespace App\Filament\Resources\Users\Schemas;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Support\Facades\Hash;
-
+use App\Models\Profile;
 class UserForm
 {
     public static function configure(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextInput::make('user_id')
-            ->numeric()
-            ->required(),
-
+        FileUpload::make('avatar')
+                    ->label('Profile Picture')
+                    ->image()
+                    ->imageEditor()
+                    ->disk('public')
+                    ->nullable(),
         TextInput::make('username')
             ->maxLength(45)
             ->required(),
@@ -30,7 +33,8 @@ class UserForm
 
         Select::make('profile_id')
             ->required()
-            ->relationship('profile', 'profile_id'),
+            ->relationship('profile', 'profile_id')
+            ->getOptionLabelFromRecordUsing(fn (Profile $record) => $record->full_name),
             ]);
     }
 }

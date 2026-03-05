@@ -14,6 +14,8 @@ return new class extends Migration
         // Users table
         Schema::create('users', function (Blueprint $table) {
             $table->id('user_id'); // primary key
+            $table->string('coop_id')->unique()->nullable();// optional, for multi-coop support
+            $table->string('avatar')->nullable();
             $table->string('username'); // required
             $table->string('email')->unique()->nullable(); // required, unique
             $table->timestamp('email_verified_at')->nullable();

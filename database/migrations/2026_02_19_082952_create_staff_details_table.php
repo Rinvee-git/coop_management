@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('staff_id');
 
             $table->foreignId('profile_id')
-                ->constrained('profiles', 'profile_id')
+                ->constrained('profiles', 'id')
                 ->cascadeOnDelete();
 
             $table->string('position', 45);

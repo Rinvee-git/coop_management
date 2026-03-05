@@ -14,8 +14,8 @@ return new class extends Migration
         // Users table
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // required
-            $table->string('email')->unique(); // required, unique
+            $table->string('username'); // required
+            $table->string('email')->unique()->nullable(); // required, unique
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
@@ -31,14 +31,14 @@ return new class extends Migration
         });
 
         // Sessions table
-        Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
-        });
+        // Schema::create('sessions', function (Blueprint $table) {
+        //     $table->string('id')->primary();
+        //     $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
+        //     $table->string('ip_address', 45)->nullable();
+        //     $table->text('user_agent')->nullable();
+        //     $table->longText('payload');
+        //     $table->integer('last_activity')->index();
+        // });
     }
 
     /**

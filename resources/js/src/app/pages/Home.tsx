@@ -158,7 +158,7 @@ export function Home() {
         .hero-image    { animation: slideInRight 1s 0.2s ease both; }
         .scroll-hint   { animation: scrollBounce 2s 2s infinite ease-in-out; }
         .badge-dot     { animation: pulse-glow 2s infinite; border-radius: 50%; }
-
+        
         .service-card {
           transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s ease;
         }

@@ -126,7 +126,7 @@ export function Layout() {
 
                         {/* Theme Toggle, Login Button & Mobile Menu */}
                         <div className="flex items-center gap-2">
-                            {mounted && (
+                            {/* {mounted && (
                                 <Button
                                     variant="ghost"
                                     size="icon"
@@ -143,7 +143,7 @@ export function Layout() {
                                         <Moon className="w-5 h-5" />
                                     )}
                                 </Button>
-                            )}
+                            )} */}
 
                             {/* Login Button */}
                             <Button
@@ -216,9 +216,9 @@ export function Layout() {
                                     size="sm"
                                     className="hidden sm:flex items-center gap-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-primary-foreground shadow-md hover:shadow-lg hover:opacity-90 transition-all duration-200 font-medium"
                                     onClick={() => {
-                                        window.location.href = "/coop/login"; // relative – uses current domain
+                                        // window.location.href = "/coop/login"; // relative – uses current domain
                                         // OR absolute if you prefer:
-                                        // window.location.href = 'http://coop_management.test/coop/login';
+                                        window.location.href = 'http://coop_management.test/coop/login';
                                     }}
                                 >
                                     <LogIn className="w-4 h-4" />

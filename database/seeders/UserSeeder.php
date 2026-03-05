@@ -50,14 +50,21 @@ class UserSeeder extends Seeder
             $profileKey = $profile->profile_id; // change to $profile->id if needed
 
             // 2) Upsert user by username (or use profile_id if that's unique)
-            User::updateOrCreate(
+           $user = User::updateOrCreate(
                 ['username' => $username],
                 [
                     'password'   => Hash::make($password),
                     'profile_id' => $profileKey,
                 ]
             );
+
+            if (empty($user->fresh()->coop_id)) {  
+            $user->coop_id = User::generateCoopId();
+            $user->saveQuietly();
+            }
         };
+
+
 
         // Known accounts you care about now
         $upsertUser('admin@example.com',          'admin',          'Admin',           'Admin',   'User');

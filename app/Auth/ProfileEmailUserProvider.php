@@ -5,7 +5,6 @@ namespace App\Auth;
 use Illuminate\Auth\EloquentUserProvider;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use App\Auth\ProfileEmailUserProvider;
 
 class ProfileEmailUserProvider extends EloquentUserProvider
 {

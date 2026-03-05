@@ -32,11 +32,21 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $primaryKey = 'user_id';
+    public function getRouteKeyName(): string
+        {
+            return 'user_id';
+        }
+    public function getFilamentRecordKey(): int|string
+        {
+            return $this->user_id;
+        }
 
     protected $fillable = [
         'username',
         'password',
         'profile_id',
+        'coop_id',
+        'avatar',
     ];
 
     /**
@@ -126,6 +136,35 @@ class User extends Authenticatable
      {
         // if you only have one panel, just block Members here
         return ! $this->hasRole('Member');
+    }
+
+    public $incrementing = false;
+    protected $keyType = 'string';
+    
+    protected static function boot()
+    {
+       parent::boot();
+
+        static::creating(function ($model) {
+            $model->coop_id = self::generateCoopId(); // 👈 generate coop_id, not id
+        });
+    }
+
+    public static function generateCoopId(): string
+    {
+        $prefix = 'COOP';
+        $year = now()->format('Y');
+
+        $last = \DB::table('users')
+            ->where('coop_id', 'like', "{$prefix}-{$year}-%")
+            ->orderByDesc('coop_id')
+            ->value('coop_id');
+
+        $sequence = $last
+            ? (int) str($last)->afterLast('-')->value() + 1
+            : 1;
+
+        return sprintf('%s-%s-%03d', $prefix, $year, $sequence);
     }
 
     public function canAccessBackOffice(): bool

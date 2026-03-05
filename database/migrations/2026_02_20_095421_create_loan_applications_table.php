@@ -15,7 +15,7 @@ return new class extends Migration
     $table->id('loan_application_id');
 
     $table->foreignId('member_id')
-        ->constrained('member_details', 'member_id');
+        ->constrained('member_details', 'id');
 
     $table->foreignId('loan_product_id')
         ->constrained('loan_products', 'loan_product_id');

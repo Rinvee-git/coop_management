@@ -31,12 +31,12 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('profile_id')
-                ->references('profile_id')->on('profiles')
+                ->references('id')->on('profiles')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
 
             $table->foreign('posted_by_user_id')
-                ->references('user_id')->on('users')
+                ->references('id')->on('users')
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
         });

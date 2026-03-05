@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('staff_details', function (Blueprint $table) {
             $table->id('staff_id');
 
-            $table->foreignId('profile_id')
-                ->constrained('profiles', 'id')
+            $table->unsignedBigInteger('profile_id');
+            $table->foreign('profile_id')
+                ->references('profile_id')
+                ->on('profiles')
                 ->cascadeOnDelete();
 
             $table->string('position', 45);

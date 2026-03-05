@@ -1,0 +1,439 @@
+<x-filament-panels::page>
+<style>
+    .ew-hero {
+        background: linear-gradient(135deg, #1e3a5f 0%, #0f2744 60%, #0a1628 100%);
+        border-radius: 1rem;
+        padding: 2rem 2.5rem;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+    .ew-hero::before {
+        content: '';
+        position: absolute;
+        top: -60px; right: -60px;
+        width: 220px; height: 220px;
+        border-radius: 50%;
+        background: rgba(251, 191, 36, 0.08);
+    }
+    .ew-hero::after {
+        content: '';
+        position: absolute;
+        bottom: -40px; left: 30%;
+        width: 140px; height: 140px;
+        border-radius: 50%;
+        background: rgba(251, 191, 36, 0.05);
+    }
+    .ew-hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(251, 191, 36, 0.15);
+        border: 1px solid rgba(251, 191, 36, 0.3);
+        color: #fbbf24;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border-radius: 999px;
+        margin-bottom: 0.75rem;
+    }
+    .ew-hero-title {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #fff;
+        margin: 0 0 0.4rem;
+        letter-spacing: -0.02em;
+    }
+    .ew-hero-sub {
+        color: rgba(255,255,255,0.55);
+        font-size: 0.875rem;
+        margin: 0;
+    }
+    .ew-stats {
+        display: flex;
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+        flex-wrap: wrap;
+    }
+    .ew-stat {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 0.75rem;
+        padding: 0.75rem 1.25rem;
+        min-width: 120px;
+    }
+    .ew-stat-value {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #fbbf24;
+        line-height: 1;
+    }
+    .ew-stat-label {
+        font-size: 0.7rem;
+        color: rgba(255,255,255,0.45);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-top: 3px;
+    }
+
+    /* Gateway Status Strip */
+    .ew-gateway-strip {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+    .ew-gateway-card {
+        background: #fff;
+        border: 1px solid #f0f0f0;
+        border-radius: 0.875rem;
+        padding: 1rem;
+        text-align: center;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        transition: all 0.2s;
+        position: relative;
+        overflow: hidden;
+    }
+    .dark .ew-gateway-card {
+        background: #1f2937;
+        border-color: rgba(255,255,255,0.07);
+    }
+    .ew-gateway-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+    .ew-gateway-top {
+        height: 3px;
+        border-radius: 0.875rem 0.875rem 0 0;
+        position: absolute;
+        top: 0; left: 0; right: 0;
+    }
+    .ew-gateway-logo {
+        width: 40px; height: 40px;
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 0.5rem;
+        font-size: 0.65rem;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+    }
+    .ew-gateway-name {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.3rem;
+    }
+    .dark .ew-gateway-name { color: #f9fafb; }
+    .ew-status-dot {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.68rem;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 999px;
+    }
+    .ew-status-active { background: #ecfdf5; color: #059669; }
+    .ew-status-pending { background: #fffbeb; color: #d97706; }
+    .ew-status-inactive { background: #f3f4f6; color: #6b7280; }
+
+    .ew-section-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #6b7280;
+        margin-bottom: 0.75rem;
+        padding-left: 2px;
+    }
+
+    .ew-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1rem;
+    }
+
+    .ew-card {
+        background: #fff;
+        border-radius: 0.875rem;
+        border: 1px solid #f0f0f0;
+        padding: 1.4rem;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .dark .ew-card {
+        background: #1f2937;
+        border-color: rgba(255,255,255,0.07);
+    }
+    .ew-card:hover {
+        box-shadow: 0 6px 24px rgba(0,0,0,0.09);
+        transform: translateY(-2px);
+        border-color: #e5e7eb;
+    }
+    .ew-card-accent {
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        border-radius: 0.875rem 0.875rem 0 0;
+    }
+    .ew-card-icon-wrap {
+        width: 42px; height: 42px;
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        margin-bottom: 1rem;
+    }
+    .ew-card-title {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.35rem;
+    }
+    .dark .ew-card-title { color: #f9fafb; }
+    .ew-card-desc {
+        font-size: 0.8rem;
+        color: #6b7280;
+        line-height: 1.5;
+        margin-bottom: 1.1rem;
+    }
+    .ew-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 0.9rem;
+        border-top: 1px solid #f3f4f6;
+    }
+    .dark .ew-card-footer { border-color: rgba(255,255,255,0.06); }
+
+    .ew-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 7px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.15s;
+    }
+    .ew-btn:hover { filter: brightness(1.08); transform: scale(1.02); }
+    .ew-btn-primary { background: #1e3a5f; color: #fff; }
+    .ew-btn-success { background: #10b981; color: #fff; }
+    .ew-btn-warning { background: #f59e0b; color: #fff; }
+    .ew-btn-info    { background: #3b82f6; color: #fff; }
+    .ew-btn-danger  { background: #ef4444; color: #fff; }
+
+    .ew-tag {
+        font-size: 0.65rem;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 999px;
+    }
+
+    /* Transaction log rows */
+    .ew-log-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid #f3f4f6;
+        font-size: 0.78rem;
+    }
+    .dark .ew-log-row { border-color: rgba(255,255,255,0.06); }
+    .ew-log-row:last-child { border-bottom: none; }
+    .ew-log-badge {
+        font-size: 0.62rem;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 999px;
+        flex-shrink: 0;
+    }
+
+    @media (max-width: 640px) {
+        .ew-hero { padding: 1.5rem; }
+        .ew-hero-title { font-size: 1.3rem; }
+        .ew-stats { gap: 0.75rem; }
+        .ew-stat { min-width: 90px; }
+        .ew-gateway-strip { grid-template-columns: repeat(2, 1fr); }
+    }
+</style>
+
+<div>
+    {{-- Hero Header --}}
+    <div class="ew-hero">
+        <div class="ew-hero-badge">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+            Payment Management
+        </div>
+        <h1 class="ew-hero-title">Online &amp; E-Wallet Payments</h1>
+        <p class="ew-hero-sub">Manage digital payment channels, gateway integrations, real-time validation, and auto-receipt generation.</p>
+        <div class="ew-stats">
+            <div class="ew-stat">
+                <div class="ew-stat-value">4</div>
+                <div class="ew-stat-label">Active Gateways</div>
+            </div>
+            <div class="ew-stat">
+                <div class="ew-stat-value">₱0.00</div>
+                <div class="ew-stat-label">Online Today</div>
+            </div>
+            <div class="ew-stat">
+                <div class="ew-stat-value">0</div>
+                <div class="ew-stat-label">Pending Override</div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Gateway Status --}}
+    <p class="ew-section-label">Payment Gateway Status</p>
+    <div class="ew-gateway-strip" style="margin-bottom:1.5rem;">
+
+        <div class="ew-gateway-card">
+            <div class="ew-gateway-top" style="background:linear-gradient(90deg,#0070ba,#00a3e0);"></div>
+            <div class="ew-gateway-logo" style="background:#e0f2fe;color:#0070ba;">G</div>
+            <div class="ew-gateway-name">GCash</div>
+            <span class="ew-status-dot ew-status-active">
+                <span style="width:6px;height:6px;border-radius:50%;background:#10b981;display:inline-block;"></span>Active
+            </span>
+        </div>
+
+        <div class="ew-gateway-card">
+            <div class="ew-gateway-top" style="background:linear-gradient(90deg,#00b388,#00d4a0);"></div>
+            <div class="ew-gateway-logo" style="background:#d1fae5;color:#059669;">M</div>
+            <div class="ew-gateway-name">Maya</div>
+            <span class="ew-status-dot ew-status-active">
+                <span style="width:6px;height:6px;border-radius:50%;background:#10b981;display:inline-block;"></span>Active
+            </span>
+        </div>
+
+        <div class="ew-gateway-card">
+            <div class="ew-gateway-top" style="background:linear-gradient(90deg,#f59e0b,#fbbf24);"></div>
+            <div class="ew-gateway-logo" style="background:#fef3c7;color:#d97706;">DC</div>
+            <div class="ew-gateway-name">Debit Card</div>
+            <span class="ew-status-dot ew-status-pending">
+                <span style="width:6px;height:6px;border-radius:50%;background:#f59e0b;display:inline-block;"></span>Pending
+            </span>
+        </div>
+
+        <div class="ew-gateway-card">
+            <div class="ew-gateway-top" style="background:linear-gradient(90deg,#2563eb,#60a5fa);"></div>
+            <div class="ew-gateway-logo" style="background:#dbeafe;color:#2563eb;">CC</div>
+            <div class="ew-gateway-name">Credit Card</div>
+            <span class="ew-status-dot ew-status-active">
+                <span style="width:6px;height:6px;border-radius:50%;background:#10b981;display:inline-block;"></span>Active
+            </span>
+        </div>
+
+    </div>
+
+    {{-- Feature Cards --}}
+    <p class="ew-section-label">Features &amp; Actions</p>
+    <div class="ew-grid">
+
+        {{-- Member Portal Integration --}}
+        <div class="ew-card">
+            <div class="ew-card-accent" style="background: linear-gradient(90deg,#1e3a5f,#3b6cb7);"></div>
+            <div class="ew-card-icon-wrap" style="background:#eff6ff;">
+                <svg class="h-5 w-5" style="color:#1e3a5f;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="ew-card-title">Member Portal Integration</div>
+            <div class="ew-card-desc">Payment gateways embedded directly into the member portal. Members can pay loans without leaving the portal interface.</div>
+            <div class="ew-card-footer">
+                <button class="ew-btn ew-btn-primary">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    Configure
+                </button>
+                <span class="ew-tag" style="background:#eff6ff;color:#1d4ed8;">Portal-ready</span>
+            </div>
+        </div>
+
+        {{-- Real-Time Validation --}}
+        <div class="ew-card">
+            <div class="ew-card-accent" style="background: linear-gradient(90deg,#059669,#34d399);"></div>
+            <div class="ew-card-icon-wrap" style="background:#ecfdf5;">
+                <svg class="h-5 w-5" style="color:#059669;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <div class="ew-card-title">Real-Time Validation</div>
+            <div class="ew-card-desc">Validates payment success instantly via gateway API. Auto-tags confirmed payments to the correct account or loan number.</div>
+            <div class="ew-card-footer">
+                <button class="ew-btn ew-btn-success">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    View Logs
+                </button>
+                <span class="ew-tag" style="background:#ecfdf5;color:#047857;">Instant</span>
+            </div>
+        </div>
+
+        {{-- Auto-Receipts --}}
+        <div class="ew-card">
+            <div class="ew-card-accent" style="background: linear-gradient(90deg,#d97706,#fbbf24);"></div>
+            <div class="ew-card-icon-wrap" style="background:#fffbeb;">
+                <svg class="h-5 w-5" style="color:#d97706;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div class="ew-card-title">Automatic Payment Confirmations</div>
+            <div class="ew-card-desc">Auto-generates and delivers digital receipts to members via email or SMS upon confirmed payment from any gateway.</div>
+            <div class="ew-card-footer">
+                <button class="ew-btn ew-btn-warning">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    Settings
+                </button>
+                <span class="ew-tag" style="background:#fffbeb;color:#b45309;">Email / SMS</span>
+            </div>
+        </div>
+
+        {{-- Admin Dashboard --}}
+        <div class="ew-card">
+            <div class="ew-card-accent" style="background: linear-gradient(90deg,#2563eb,#60a5fa);"></div>
+            <div class="ew-card-icon-wrap" style="background:#eff6ff;">
+                <svg class="h-5 w-5" style="color:#2563eb;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <div class="ew-card-title">Admin Dashboard</div>
+
+            {{-- Mini log preview --}}
+            <div style="margin-bottom:0.9rem;">
+                <div class="ew-log-row">
+                    <span class="ew-log-badge" style="background:#ecfdf5;color:#059669;">GCash</span>
+                    <span style="flex:1;color:#374151;" class="dark:text-gray-300">₱1,500.00 — Loan #00234</span>
+                    <span style="color:#9ca3af;font-size:0.7rem;">9:02 AM</span>
+                </div>
+                <div class="ew-log-row">
+                    <span class="ew-log-badge" style="background:#d1fae5;color:#059669;">Maya</span>
+                    <span style="flex:1;color:#374151;" class="dark:text-gray-300">₱800.00 — Loan #00189</span>
+                    <span style="color:#9ca3af;font-size:0.7rem;">8:47 AM</span>
+                </div>
+                <div class="ew-log-row">
+                    <span class="ew-log-badge" style="background:#dbeafe;color:#2563eb;">Card</span>
+                    <span style="flex:1;color:#374151;" class="dark:text-gray-300">₱3,200.00 — Loan #00301</span>
+                    <span style="color:#9ca3af;font-size:0.7rem;">Yesterday</span>
+                </div>
+            </div>
+
+            <div class="ew-card-footer">
+                <button class="ew-btn ew-btn-info">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    Open Dashboard
+                </button>
+                <span class="ew-tag" style="background:#eff6ff;color:#1d4ed8;">Live data</span>
+            </div>
+        </div>
+
+        {{-- Manual Override --}}
+        <div class="ew-card">
+            <div class="ew-card-accent" style="background: linear-gradient(90deg,#dc2626,#f87171);"></div>
+            <div class="ew-card-icon-wrap" style="background:#fef2f2;">
+                <svg class="h-5 w-5" style="color:#dc2626;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>
+            </div>
+            <div class="ew-card-title">Manual Override</div>
+            <div class="ew-card-desc">Admin can manually confirm or override payments when API validation fails. Requires reason entry and creates an audit entry.</div>
+            <div class="ew-card-footer">
+                <button class="ew-btn ew-btn-danger">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                    Override
+                </button>
+                <span class="ew-tag" style="background:#fef2f2;color:#b91c1c;">Admin only</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+</x-filament-panels::page>

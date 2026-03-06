@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -13,44 +12,41 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\Profile;
 use App\Models\StaffDetail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Crypt;
 use Filament\Panel;
+use Filament\Models\Contracts\HasAvatar;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Str;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasAvatar
 {
-    /**
-     * Used by Filament for user display name.
-     * Always returns a string.
-     */
-
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, HasApiTokens, Notifiable,HasRoles;
+    use HasFactory, HasApiTokens, Notifiable, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $primaryKey = 'user_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     public function getRouteKeyName(): string
-        {
-            return 'encoded_id';
-        }
+    {
+        return 'encoded_id';
+    }
+
     public function getEncodedIdAttribute(): string
     {
-        return \Illuminate\Support\Facades\Crypt::encryptString($this->user_id);
+        return Crypt::encryptString($this->user_id);
     }
+
     public function resolveRouteBinding($value, $field = null): ?self
-        {
-            $decoded = base64_decode($value);
-            return self::where('user_id', $decoded)->first();
-        }
+    {
+        $decoded = base64_decode($value);
+        return self::where('user_id', $decoded)->first();
+    }
+
     public function getFilamentRecordKey(): int|string
-        {
-            return $this->encoded_id;
-        }
+    {
+        return $this->encoded_id;
+    }
 
     protected $fillable = [
         'username',
@@ -60,27 +56,17 @@ class User extends Authenticatable
         'avatar',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return ['password' => 'hashed'];
     }
 
-        public function profile()
+    public function profile()
     {
         return $this->belongsTo(Profile::class, 'profile_id', 'profile_id');
     }
@@ -101,6 +87,13 @@ class User extends Authenticatable
         return $key ? ('User #' . $key) : 'User';
     }
 
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->avatar
+            ? Storage::disk('public')->url($this->avatar)
+            : null;
+    }
+
     public function staffDetail()
     {
         return $this->hasOne(StaffDetail::class, 'profile_id', 'profile_id');
@@ -116,14 +109,12 @@ class User extends Authenticatable
         return $this->profile?->role?->name;
     }
 
-
     public function isStaff(): bool
     {
         return $this->staffDetail !== null;
     }
 
-
-   public function isAdmin(): bool
+    public function isAdmin(): bool
     {
         return $this->hasRole('Admin');
     }
@@ -144,20 +135,21 @@ class User extends Authenticatable
     }
 
     public function canAccessPanel(Panel $panel): bool
-     {
-        // if you only have one panel, just block Members here
+    {
         return ! $this->hasRole('Member');
     }
 
-    public $incrementing = false;
-    protected $keyType = 'string';
+    public function canAccessBackOffice(): bool
+    {
+        return ! $this->isMember();
+    }
 
     protected static function boot()
     {
-       parent::boot();
+        parent::boot();
 
         static::creating(function ($model) {
-            $model->coop_id = self::generateCoopId(); // 👈 generate coop_id, not id
+            $model->coop_id = self::generateCoopId();
         });
     }
 
@@ -177,9 +169,4 @@ class User extends Authenticatable
 
         return sprintf('%s-%s-%03d', $prefix, $year, $sequence);
     }
-
-    public function canAccessBackOffice(): bool
-{
-    return ! $this->isMember(); // members should not access admin panel
-}
 }

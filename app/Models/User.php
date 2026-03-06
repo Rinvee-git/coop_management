@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,35 +13,54 @@ use App\Models\Profile;
 use App\Models\StaffDetail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
+<<<<<<< HEAD
+=======
+use Illuminate\Support\Facades\Crypt;
+>>>>>>> main
 use Filament\Panel;
+use Filament\Models\Contracts\HasAvatar;
 use Laravel\Sanctum\HasApiTokens;
 use Filament\Models\Contracts\HasAvatar;
 
 class User extends Authenticatable implements HasAvatar
 {
-    /**
-     * Used by Filament for user display name.
-     * Always returns a string.
-     */
-
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, HasApiTokens, Notifiable, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $primaryKey = 'user_id';
+<<<<<<< HEAD
 
     public function getRouteKeyName(): string
     {
         return 'user_id';
+=======
+    public $incrementing = false;
+    protected $keyType = 'string';
+
+    public function getRouteKeyName(): string
+    {
+        return 'encoded_id';
+    }
+
+    public function getEncodedIdAttribute(): string
+    {
+        return Crypt::encryptString($this->user_id);
+    }
+
+    public function resolveRouteBinding($value, $field = null): ?self
+    {
+        $decoded = base64_decode($value);
+        return self::where('user_id', $decoded)->first();
+>>>>>>> main
     }
 
     public function getFilamentRecordKey(): int|string
     {
+<<<<<<< HEAD
         return $this->user_id;
+=======
+        return $this->encoded_id;
+>>>>>>> main
     }
 
     protected $fillable = [
@@ -53,21 +71,11 @@ class User extends Authenticatable implements HasAvatar
         'avatar',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return ['password' => 'hashed'];
@@ -146,8 +154,15 @@ class User extends Authenticatable implements HasAvatar
         return ! $this->hasRole('Member');
     }
 
+<<<<<<< HEAD
     public $incrementing = false;
     protected $keyType = 'string';
+=======
+    public function canAccessBackOffice(): bool
+    {
+        return ! $this->isMember();
+    }
+>>>>>>> main
 
     protected static function boot()
     {
@@ -174,9 +189,12 @@ class User extends Authenticatable implements HasAvatar
 
         return sprintf('%s-%s-%03d', $prefix, $year, $sequence);
     }
+<<<<<<< HEAD
 
     public function canAccessBackOffice(): bool
     {
         return ! $this->isMember();
     }
+=======
+>>>>>>> main
 }

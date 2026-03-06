@@ -29,6 +29,8 @@ class LoanApplicationsResource extends Resource
       protected static ?string $navigationLabel = 'Loan Applications';
 
     protected static ?string $recordTitleAttribute = 'loan_application_id';
+    protected static string|\UnitEnum|null $navigationGroup = 'Loan Management';
+
 
     protected static string|\UnitEnum|null $navigationGroup = 'Loan Management';
 
@@ -151,7 +153,7 @@ class LoanApplicationsResource extends Resource
                 TextColumn::make('amount_requested')->money('PHP'),
 
                 TextColumn::make('term_months')
-                    ->label('Term'),
+                    ->label('Term Months'),
 
                 BadgeColumn::make('status')
                     ->colors([
@@ -298,4 +300,8 @@ class LoanApplicationsResource extends Resource
         \App\Filament\Resources\LoanApplications\RelationManagers\CashflowsRelationManager::class,
     ];
 }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> main

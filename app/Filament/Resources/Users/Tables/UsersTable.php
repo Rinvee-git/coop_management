@@ -36,7 +36,10 @@ class UsersTable
 =======
                 ->searchable()
                 ->sortable(),
+<<<<<<< HEAD
 >>>>>>> f8e17555d7b729e86b6adf0ed170e6030b3ea405
+=======
+>>>>>>> main
                 TextColumn::make('profile.full_name')
                     ->label('Profile Name')
                     ->searchable()

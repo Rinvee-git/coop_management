@@ -26,7 +26,6 @@ public function type()
     return $this->belongsTo(\App\Models\LoanType::class, 'loan_type_id', 'loan_type_id');
 }
 
-
     protected $casts = [
         'amount_requested' => 'decimal:2',
         'submitted_at' => 'datetime',

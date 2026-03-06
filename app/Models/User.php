@@ -39,7 +39,12 @@ class User extends Authenticatable implements HasAvatar
 
     public function resolveRouteBinding($value, $field = null): ?self
     {
-        $decoded = base64_decode($value);
+        try {
+            $decoded = Crypt::decryptString($value);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException) {
+            return null;
+        }
+
         return self::where('user_id', $decoded)->first();
     }
 

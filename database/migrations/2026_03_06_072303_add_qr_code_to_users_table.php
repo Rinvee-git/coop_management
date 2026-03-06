@@ -9,16 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-      Schema::table('users', function (Blueprint $table) {
-    $table->unsignedBigInteger('profile_id')->nullable();
-$table->foreign('profile_id')
-    ->references('profile_id')
-    ->on('profiles')
-    ->nullOnDelete();
-});
-    }
+   // database/migrations/xxxx_add_qr_code_to_users_table.php
+public function up()
+{
+    Schema::table('users', function (Blueprint $table) {
+        $table->string('qr_code')->nullable();
+    });
+}
 
     /**
      * Reverse the migrations.

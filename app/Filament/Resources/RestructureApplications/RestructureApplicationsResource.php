@@ -8,7 +8,8 @@ use App\Filament\Resources\RestructureApplications\Pages\EditRestructureApplicat
 use App\Filament\Resources\RestructureApplications\Pages\ListRestructureApplications;
 use App\Filament\Resources\RestructureApplications\Schemas\RestructureApplicationsForm;
 use App\Filament\Resources\RestructureApplications\Tables\RestructureApplicationsTable;
-use App\Models\RestructureApplication;
+use App\Models\RestructureApplications;
+use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use BackedEnum;
@@ -17,15 +18,17 @@ use App\Models\MemberDetail;
 
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Models\LoanApplication;
 use Illuminate\Database\Eloquent\Builder;
 
 class RestructureApplicationsResource extends Resource
 {
-    protected static ?string $model = RestructureApplication::class;
+    protected static ?string $model = LoanApplication::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentCheck;
-
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
     protected static ?string $navigationLabel = 'Restructure Applications';
+
+    protected static ?string $recordTitleAttribute = 'loan_application_id';
     protected static string|\UnitEnum|null $navigationGroup = 'Loan Management';
     protected static ?string $recordTitleAttribute = 'restructure_application_id';
     public static function form(Schema $schema): Schema
@@ -38,25 +41,19 @@ class RestructureApplicationsResource extends Resource
         return RestructureApplicationsTable::configure($table);
     }
 
-
- 
-public static function getEloquentQuery(): Builder
-{
-    return parent::getEloquentQuery();
-}
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListRestructureApplications::route('/'),
-            'create' => Pages\CreateRestructureApplications::route('/create'),
-            'edit' => Pages\EditRestructureApplications::route('/{record}/edit'),
-        ];
-    }
-
     public static function getRelations(): array
     {
         return [
-            // Add relation managers here if needed
+            //
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListRestructureApplications::route('/'),
+            'create' => CreateRestructureApplications::route('/create'),
+            'edit' => EditRestructureApplications::route('/{record}/edit'),
         ];
     }
 }

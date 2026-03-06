@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\LoanProducts\Schemas;
+namespace App\Filament\Resources\RestructureApplications\Schemas;
 
 use Filament\Schemas\Schema;
 
-class LoanProductForm
+class RestructureApplicationsForm
 {
     public static function configure(Schema $schema): Schema
     {

@@ -13,11 +13,13 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\Profile;
 use App\Models\StaffDetail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 use Filament\Panel;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
+use Filament\Models\Contracts\HasAvatar;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasAvatar
 {
     /**
      * Used by Filament for user display name.
@@ -25,7 +27,7 @@ class User extends Authenticatable
      */
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, HasApiTokens, Notifiable,HasRoles;
+    use HasFactory, HasApiTokens, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -51,6 +53,15 @@ class User extends Authenticatable
         {
             return $this->encoded_id;
         }
+    {
+        return 'user_id';
+    }
+
+    public function getFilamentRecordKey(): int|string
+    {
+        return $this->user_id;
+    }
+
     protected $fillable = [
         'username',
         'password',
@@ -79,7 +90,7 @@ class User extends Authenticatable
         return ['password' => 'hashed'];
     }
 
-        public function profile()
+    public function profile()
     {
         return $this->belongsTo(Profile::class, 'profile_id', 'profile_id');
     }
@@ -100,6 +111,13 @@ class User extends Authenticatable
         return $key ? ('User #' . $key) : 'User';
     }
 
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->avatar
+            ? Storage::disk('public')->url($this->avatar)
+            : null;
+    }
+
     public function staffDetail()
     {
         return $this->hasOne(StaffDetail::class, 'profile_id', 'profile_id');
@@ -115,14 +133,12 @@ class User extends Authenticatable
         return $this->profile?->role?->name;
     }
 
-
     public function isStaff(): bool
     {
         return $this->staffDetail !== null;
     }
 
-
-   public function isAdmin(): bool
+    public function isAdmin(): bool
     {
         return $this->hasRole('Admin');
     }
@@ -143,20 +159,19 @@ class User extends Authenticatable
     }
 
     public function canAccessPanel(Panel $panel): bool
-     {
-        // if you only have one panel, just block Members here
+    {
         return ! $this->hasRole('Member');
     }
 
     public $incrementing = false;
     protected $keyType = 'string';
-    
+
     protected static function boot()
     {
-       parent::boot();
+        parent::boot();
 
         static::creating(function ($model) {
-            $model->coop_id = self::generateCoopId(); // 👈 generate coop_id, not id
+            $model->coop_id = self::generateCoopId();
         });
     }
 
@@ -178,7 +193,7 @@ class User extends Authenticatable
     }
 
     public function canAccessBackOffice(): bool
-{
-    return ! $this->isMember(); // members should not access admin panel
-}
+    {
+        return ! $this->isMember();
+    }
 }

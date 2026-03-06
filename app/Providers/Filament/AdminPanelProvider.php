@@ -29,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('coop')
             ->login()
+            ->favicon('/images/my-logo.svg')
             ->brandLogo(fn() => view('filament.brand'))
             ->plugins([
                 FilamentShieldPlugin::make()

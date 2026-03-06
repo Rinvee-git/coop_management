@@ -18,7 +18,7 @@ class MembershipTypeResource extends Resource
 {
     protected static ?string $model = MembershipType::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedQueueList;
 
     protected static ?string $recordTitleAttribute = 'name';
 

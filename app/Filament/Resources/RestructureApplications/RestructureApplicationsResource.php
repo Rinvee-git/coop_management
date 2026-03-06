@@ -13,16 +13,25 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Models\LoanApplication;
+use Illuminate\Database\Eloquent\Builder;
 
 class RestructureApplicationsResource extends Resource
 {
-    protected static ?string $model = RestructureApplications::class;
+    protected static ?string $model = LoanApplication::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?string $navigationLabel = 'Restructure Applications';
 
-    protected static ?string $recordTitleAttribute = 'name';
-    protected static string|\UnitEnum|null $navigationGroup = 'Loans';
-    
+    protected static ?string $recordTitleAttribute = 'loan_application_id';
+    protected static string|\UnitEnum|null $navigationGroup = 'Loan Management';
+
+     public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->where('application_type', 'Restructure');
+    }
+
     public static function form(Schema $schema): Schema
     {
         return RestructureApplicationsForm::configure($schema);

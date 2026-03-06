@@ -27,7 +27,7 @@ class UsersTable
                 TextColumn::make('username')
                 ->searchable()
                 ->sortable(),
-                TextColumn::make('profile.full_name') 
+                TextColumn::make('profile.full_name')
                     ->label('Profile Name')
                     ->searchable()
                     ->sortable(),

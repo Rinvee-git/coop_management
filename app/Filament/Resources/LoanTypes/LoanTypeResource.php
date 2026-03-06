@@ -18,11 +18,11 @@ class LoanTypeResource extends Resource
 {
     protected static ?string $model = LoanType::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedComputerDesktop;
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?string $navigationLabel = 'Loan Management';
+    protected static string|\UnitEnum|null $navigationGroup = 'Loan Management';
 
     public static function form(Schema $schema): Schema
     {
@@ -34,12 +34,7 @@ class LoanTypeResource extends Resource
         return LoanTypesTable::configure($table);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
+
 
     public static function getPages(): array
     {
@@ -47,6 +42,13 @@ class LoanTypeResource extends Resource
             'index' => ListLoanTypes::route('/'),
             'create' => CreateLoanType::route('/create'),
             'edit' => EditLoanType::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            \App\Filament\Resources\LoanTypes\RelationManagers\LoanTypeRequirementsRelationManager::class,
         ];
     }
 }

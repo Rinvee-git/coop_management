@@ -5,12 +5,33 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Traits\HasRoles;
 use Filament\Forms\Components\Hidden;
+use Illuminate\Support\Facades\Crypt;
 
 class Profile extends Model
 {
+    public function getRouteKeyName(): string
+    {
+        return 'encoded_id';
+    }
+
+    public function getEncodedIdAttribute(): string
+    {
+        return Crypt::encryptString($this->profile_id);
+    }
+
+    public function resolveRouteBinding($value, $field = null): ?self
+    {
+        $decoded = Crypt::decryptString($value);
+        return self::where('profile_id', $decoded)->first();
+    }
+
+    public function getFilamentRecordKey(): int|string
+    {
+        return $this->encoded_id;
+    }
     use HasRoles;
         protected $primaryKey = 'profile_id';
-
+    
     protected $fillable = [
         'first_name','middle_name','last_name',
         'email','mobile_number','birthdate','sex','address','roles_id',

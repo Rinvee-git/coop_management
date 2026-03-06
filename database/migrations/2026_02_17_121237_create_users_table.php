@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('email')->unique()->nullable(); // required, unique
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            // $table->string('qr_code')->nullable();
+            $table->integer('profile_id')->unsigned()->nullable(); // FK to profiles
             $table->rememberToken();
             $table->timestamps();
         });

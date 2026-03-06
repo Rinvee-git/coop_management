@@ -31,6 +31,12 @@ class UserResource extends Resource
         return 'user_id';
     }
 
+   public static function resolveRecordRouteBinding(string|int $key, ?\Closure $modifyQuery = null): ?\Illuminate\Database\Eloquent\Model
+    {
+        $decoded = \Illuminate\Support\Facades\Crypt::decryptString($key);
+        return static::getModel()::where('user_id', $decoded)->first();
+    }
+
     public static function form(Schema $schema): Schema
     {
         return UserForm::configure($schema);

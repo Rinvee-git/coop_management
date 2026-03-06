@@ -15,6 +15,7 @@ use App\Models\StaffDetail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Filament\Panel;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -32,15 +33,24 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $primaryKey = 'user_id';
+
     public function getRouteKeyName(): string
         {
-            return 'user_id';
+            return 'encoded_id';
+        }
+    public function getEncodedIdAttribute(): string
+    {
+        return \Illuminate\Support\Facades\Crypt::encryptString($this->user_id);
+    }
+    public function resolveRouteBinding($value, $field = null): ?self
+        {
+            $decoded = base64_decode($value);
+            return self::where('user_id', $decoded)->first();
         }
     public function getFilamentRecordKey(): int|string
         {
-            return $this->user_id;
+            return $this->encoded_id;
         }
-
     protected $fillable = [
         'username',
         'password',

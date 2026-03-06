@@ -13,19 +13,6 @@ return new class extends Migration
             $table->longText('value')->nullable();
             $table->timestamps();
         });
-
-        // Seed defaults
-        $defaults = [
-            ['key' => 'app_name',    'value' => config('app.name')],
-            ['key' => 'logo',        'value' => null],
-            ['key' => 'favicon',     'value' => null],
-            ['key' => 'primary_color', 'value' => '#0d9488'],
-            ['key' => 'font',        'value' => 'Rajdhani'],
-        ];
-
-        foreach ($defaults as $setting) {
-            DB::table('system_settings')->insertOrIgnore($setting);
-        }
     }
 
     public function down(): void

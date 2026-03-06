@@ -7,53 +7,70 @@ use App\Models\Profile;
 use App\Models\Role;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Ensure default roles exist
-        $userRole = Role::firstOrCreate(['name' => 'User'], ['guard_name' => 'web']);
-        $adminRole = Role::firstOrCreate(['name' => 'Admin'], ['guard_name' => 'web']);
+        // Roles
+        $roles = [
+            'Admin','Manager','Staff','Member','Cashier','Loan Officer','Account Officer','Teller'
+        ];
 
-        // Create 10 random users with associated profiles
-        for ($i = 0; $i < 10; $i++) {
-            $first = fake()->firstName();
-            $last = fake()->lastName();
-            $email = fake()->unique()->safeEmail();
-
-            $profile = Profile::create([
-                'first_name' => $first,
-                'middle_name' => null,
-                'last_name' => $last,
-                'email' => $email,
-                'roles_id' => $userRole->id,
-            ]);
-
-            User::create([
-                'username' => Str::slug($first . ' ' . $last) ?: ('user' . $i),
-                'password' => Hash::make('password'),
-                'profile_id' => $profile->profile_id,
-            ]);
+        $roleMap = [];
+        foreach ($roles as $name) {
+            $roleMap[$name] = Role::firstOrCreate(
+                ['name' => $name],
+                ['guard_name' => 'web']
+            );
         }
 
-        // Create a known admin user with a known password
-        $adminProfile = Profile::create([
-            'first_name' => 'Admin',
-            'middle_name' => null,
-            'last_name' => 'User',
-            'email' => 'admin@example.com',
-            'roles_id' => $adminRole->id,
-        ]);
+        // Helper: upsert profile + upsert user
+        $upsertUser = function (
+            string $email,
+            string $username,
+            string $roleName,
+            string $first,
+            string $last,
+            string $password = 'password'
+        ) use ($roleMap) {
 
-        User::create([
-            'username' => 'admin',
-            'password' => Hash::make('password'),
-            'profile_id' => $adminProfile->profile_id,
-        ]);
+            // 1) Upsert profile by unique email
+            $profile = Profile::updateOrCreate(
+                ['email' => $email],
+                [
+                    'first_name'  => $first,
+                    'middle_name' => null,
+                    'last_name'   => $last,
+                    'roles_id'    => $roleMap[$roleName]->id,
+                ]
+            );
+
+            // IMPORTANT: keep profile_id if that's your PK, otherwise use $profile->id
+            $profileKey = $profile->profile_id; // change to $profile->id if needed
+
+            // 2) Upsert user by username (or use profile_id if that's unique)
+           $user = User::updateOrCreate(
+                ['username' => $username],
+                [
+                    'password'   => Hash::make($password),
+                    'profile_id' => $profileKey,
+                ]
+            );
+
+            if (empty($user->fresh()->coop_id)) {  
+            $user->coop_id = User::generateCoopId();
+            $user->saveQuietly();
+            }
+        };
+
+
+
+        // Known accounts you care about now
+        $upsertUser('admin@example.com',          'admin',          'Admin',           'Admin',   'User');
+        $upsertUser('manager@example.com',        'manager',        'Manager',         'Manager', 'User');
+        $upsertUser('member@example.com',         'member',         'Member',          'Member',  'User');
+        $upsertUser('loanofficer@example.com',    'loanofficer',    'Loan Officer',    'Loan',    'Officer');
+        $upsertUser('accountofficer@example.com', 'accountofficer', 'Account Officer', 'Account', 'Officer');
     }
 }

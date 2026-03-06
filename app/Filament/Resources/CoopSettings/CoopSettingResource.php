@@ -18,7 +18,7 @@ class CoopSettingResource extends Resource
 {
     protected static ?string $model = CoopSetting::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAdjustmentsHorizontal;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Share Capital';
 

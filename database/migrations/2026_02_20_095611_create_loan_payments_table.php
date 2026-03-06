@@ -13,9 +13,9 @@ return new class extends Migration
     {
        Schema::create('loan_payments', function (Blueprint $table) {
     $table->id('loan_payment_id');
-
-    $table->foreignId('loan_account_id')
-        ->constrained('loan_accounts', 'loan_account_id');
+    
+   $table->foreignId('loan_application_id')
+      ->constrained('loan_applications', 'loan_application_id');
 
     $table->date('payment_date');
 

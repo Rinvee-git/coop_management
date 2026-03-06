@@ -21,7 +21,7 @@ class MemberDetailResource extends Resource
 {
     protected static ?string $model = MemberDetail::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedIdentification;
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -68,7 +68,7 @@ class MemberDetailResource extends Resource
 //         return $query->where('branch_id', $user->branchId());
 //     }
 
-    
+
 
     public static function getPages(): array
     {

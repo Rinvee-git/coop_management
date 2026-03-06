@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MemberDetail extends Model
 {
-    protected $primaryKey = 'member_id';
+    // protected $primaryKey = 'member_id';
 
 
     protected $fillable = [
@@ -36,9 +36,9 @@ class MemberDetail extends Model
     ];
 
         public function profile()
-    {
-        return $this->belongsTo(Profile::class, 'profile_id', 'profile_id');
-    }
+{
+    return $this->belongsTo(Profile::class, 'profile_id', 'profile_id');
+}
 
     public function membershipType()
     {

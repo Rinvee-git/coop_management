@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('loan_applications', function (Blueprint $table) {
             $table->id('loan_application_id');
 
-            $table->foreignId('member_id')
-                ->constrained('member_details', 'member_id');
+    $table->foreignId('member_id')
+        ->constrained('member_details', 'id');
+    $table->unsignedBigInteger('loan_type_id');
+    $table->foreign('loan_type_id')->references('loan_type_id')->on('loan_types');
 
-            $table->foreignId('loan_product_id')
-                ->constrained('loan_products', 'loan_product_id');
+    // Removed loan_product_id, as loan_type_id covers the product
 
             $table->decimal('amount_requested', 14, 2);
             $table->integer('term_months');

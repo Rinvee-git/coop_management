@@ -17,7 +17,7 @@ return new class extends Migration
         $table->string('first_name', 100);
         $table->string('middle_name', 45)->nullable();
         $table->string('last_name', 45);
-
+        $table->text('image_path')->nullable();
         $table->string('email')->unique(); // ⭐ LOGIN EMAIL HERE
         $table->string('mobile_number', 45)->nullable();
         $table->date('birthdate')->nullable();

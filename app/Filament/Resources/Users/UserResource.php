@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Crypt;
 
 class UserResource extends Resource
 {
@@ -26,15 +27,34 @@ class UserResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-     public static function getRecordRouteKeyName(): ?string
+    public static function getRecordRouteKeyName(): ?string
     {
         return 'user_id';
     }
 
-   public static function resolveRecordRouteBinding(string|int $key, ?\Closure $modifyQuery = null): ?\Illuminate\Database\Eloquent\Model
+    /**
+     * Encrypt the user_id when building the URL.
+     * e.g. /users/eyJpdiI6I.../edit
+     */
+    public static function getRecordRouteKey(\Illuminate\Database\Eloquent\Model $record): string
     {
-        $decoded = \Illuminate\Support\Facades\Crypt::decryptString($key);
-        return static::getModel()::where('user_id', $decoded)->first();
+        return Crypt::encryptString($record->user_id);
+    }
+
+    /**
+     * Decrypt the URL segment back to user_id and resolve the record.
+     */
+    public static function resolveRecordRouteBinding(
+        int|string $key,
+        ?\Closure $modifyQuery = null
+    ): ?\Illuminate\Database\Eloquent\Model {
+        try {
+            $decrypted = Crypt::decryptString($key);
+        } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+            abort(404);
+        }
+
+        return static::getModel()::where('user_id', $decrypted)->first() ?? abort(404);
     }
 
     public static function form(Schema $schema): Schema
@@ -49,17 +69,15 @@ class UserResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ListUsers::route('/'),
+            'index'  => ListUsers::route('/'),
             // 'create' => CreateUser::route('/create'),
-            'edit' => EditUser::route('/{record}/edit'),
+            'edit'   => EditUser::route('/{record}/edit'),
         ];
     }
 }

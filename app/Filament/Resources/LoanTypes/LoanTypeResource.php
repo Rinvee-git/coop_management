@@ -34,12 +34,7 @@ class LoanTypeResource extends Resource
         return LoanTypesTable::configure($table);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
+
 
     public static function getPages(): array
     {
@@ -47,6 +42,13 @@ class LoanTypeResource extends Resource
             'index' => ListLoanTypes::route('/'),
             'create' => CreateLoanType::route('/create'),
             'edit' => EditLoanType::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            \App\Filament\Resources\LoanTypes\RelationManagers\LoanTypeRequirementsRelationManager::class,
         ];
     }
 }

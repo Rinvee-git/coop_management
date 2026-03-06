@@ -16,7 +16,7 @@ class MemberDetailsTable
     {
         return $table
             ->columns([
-                 TextColumn::make('member_id')->label('ID')->sortable(),
+                 TextColumn::make('id')->label('ID')->sortable(),
 
             TextColumn::make('profile.full_name')
                 ->label('Member')
@@ -45,7 +45,7 @@ class MemberDetailsTable
                 ->height(30)
                 ->toggleable(isToggledHiddenByDefault: true),
         ])
-        ->defaultSort('member_id', 'desc')
+        ->defaultSort('id', 'desc')
             ->filters([
                 //
             ])

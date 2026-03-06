@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             MembershipTypeSeeder::class,
             LoanTypeSeeder::class,
             MemberDetailSeeder::class,
+            SystemSettingsSeeder::class,
         ]);
     }
 }

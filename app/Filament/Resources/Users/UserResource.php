@@ -18,7 +18,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::User;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUser;
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -29,6 +29,12 @@ class UserResource extends Resource
      public static function getRecordRouteKeyName(): ?string
     {
         return 'user_id';
+    }
+
+   public static function resolveRecordRouteBinding(string|int $key, ?\Closure $modifyQuery = null): ?\Illuminate\Database\Eloquent\Model
+    {
+        $decoded = \Illuminate\Support\Facades\Crypt::decryptString($key);
+        return static::getModel()::where('user_id', $decoded)->first();
     }
 
     public static function form(Schema $schema): Schema
@@ -52,7 +58,7 @@ class UserResource extends Resource
     {
         return [
             'index' => ListUsers::route('/'),
-            'create' => CreateUser::route('/create'),
+            // 'create' => CreateUser::route('/create'),
             'edit' => EditUser::route('/{record}/edit'),
         ];
     }

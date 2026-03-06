@@ -13,12 +13,23 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Crypt;
 
 class ProfileResource extends Resource
 {
+    public static function getRecordRouteKeyName(): ?string
+    {
+        return 'profile_id';
+    }
+
+    public static function resolveRecordRouteBinding(string|int $key, ?\Closure $modifyQuery = null): ?\Illuminate\Database\Eloquent\Model
+    {
+        $decoded = Crypt::decryptString($key);
+        return static::getModel()::where('profile_id', $decoded)->first();
+    }
     protected static ?string $model = Profile::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::UserCircle;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserCircle;
 
     protected static ?string $recordTitleAttribute = 'name';
 

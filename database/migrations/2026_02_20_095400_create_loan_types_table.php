@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('loan_types', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('loan_type_id');
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('max_interest_rate', 5, 2);

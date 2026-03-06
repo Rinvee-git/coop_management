@@ -10,3 +10,5 @@ Route::get('/', function () {
 Route::get('/{path?}', function () {
     return view('welcome');
 })->where('path', '.*')->name('spa');
+
+Route::view('/scanner', 'qr-scanner');

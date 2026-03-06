@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\LoanProducts\Tables;
+namespace App\Filament\Resources\RestructureApplications\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Table;
 
-class LoanProductsTable
+class RestructureApplicationsTable
 {
     public static function configure(Table $table): Table
     {

@@ -12,7 +12,6 @@ use App\Models\RestructureApplications;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use BackedEnum;
 use Filament\Forms\Components\Select;
 use App\Models\MemberDetail;
 
@@ -30,7 +29,6 @@ class RestructureApplicationsResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'loan_application_id';
     protected static string|\UnitEnum|null $navigationGroup = 'Loan Management';
-    protected static ?string $recordTitleAttribute = 'restructure_application_id';
     public static function form(Schema $schema): Schema
     {
         return RestructureApplicationsForm::configure($schema);

@@ -29,22 +29,13 @@ class UsersTable
                     ->sortable(),
 
                 TextColumn::make('username')
-<<<<<<< HEAD
                     ->searchable()
                     ->sortable(),
 
-=======
-                ->searchable()
-                ->sortable(),
-<<<<<<< HEAD
->>>>>>> f8e17555d7b729e86b6adf0ed170e6030b3ea405
-=======
->>>>>>> main
                 TextColumn::make('profile.full_name')
                     ->label('Profile Name')
                     ->searchable()
                     ->sortable(),
-
 
                 ImageColumn::make('qr_code')
                     ->label('QR Code')
@@ -56,7 +47,6 @@ class UsersTable
                 //
             ])
             ->recordActions([
-                // Click to enlarge QR Code
                 Action::make('enlarge_qr')
                     ->label('Print QR')
                     ->icon('heroicon-o-magnifying-glass-plus')

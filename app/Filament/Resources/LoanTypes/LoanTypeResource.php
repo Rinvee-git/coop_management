@@ -23,10 +23,6 @@ class LoanTypeResource extends Resource
     protected static ?string $recordTitleAttribute = 'name';
 
     protected static string|\UnitEnum|null $navigationGroup = 'Loan Management';
-<<<<<<< HEAD
-
-=======
->>>>>>> main
     public static function form(Schema $schema): Schema
     {
         return LoanTypeForm::configure($schema);

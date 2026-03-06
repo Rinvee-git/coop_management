@@ -8,11 +8,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\TextInput\Mask;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-<<<<<<< HEAD
-=======
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
->>>>>>> main
 
 class LoanTypeRequirementsRelationManager extends RelationManager
 {
@@ -54,13 +51,8 @@ class LoanTypeRequirementsRelationManager extends RelationManager
             ])
             ->defaultSort('sort_order')
             ->actions([
-<<<<<<< HEAD
-                \Filament\Tables\Actions\EditAction::make(),
-                \Filament\Tables\Actions\DeleteAction::make(),
-=======
                 EditAction::make(),
                 DeleteAction::make(),
->>>>>>> main
             ])
             ->bulkActions([]);
     }

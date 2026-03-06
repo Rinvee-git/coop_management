@@ -29,8 +29,8 @@ class LoanApplicationsResource extends Resource
       protected static ?string $navigationLabel = 'Loan Applications';
 
     protected static ?string $recordTitleAttribute = 'loan_application_id';
-
     protected static string|\UnitEnum|null $navigationGroup = 'Loan Management';
+
 
    public static function form(Schema $schema): Schema
 {
@@ -151,7 +151,7 @@ class LoanApplicationsResource extends Resource
                 TextColumn::make('amount_requested')->money('PHP'),
 
                 TextColumn::make('term_months')
-                    ->label('Term'),
+                    ->label('Term Months'),
 
                 BadgeColumn::make('status')
                     ->colors([

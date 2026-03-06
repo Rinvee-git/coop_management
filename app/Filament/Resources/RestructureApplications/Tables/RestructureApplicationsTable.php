@@ -2,15 +2,41 @@
 
 namespace App\Filament\Resources\RestructureApplications\Tables;
 
+<<<<<<< HEAD
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Tables\Table;
+=======
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
 use App\Models\LoanApplication;
+>>>>>>> main
 
 class RestructureApplicationsTable
 {
     public static function configure(Table $table): Table
     {
+<<<<<<< HEAD
+        return $table
+            ->columns([
+                //
+            ])
+            ->filters([
+                //
+            ])
+            ->recordActions([
+                EditAction::make(),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+}
+=======
         return $table->columns([
             TextColumn::make('loan_application_id')->label('ID')->sortable(),
             TextColumn::make('member.full_name')->label('Member'),
@@ -30,3 +56,4 @@ class RestructureApplicationsTable
         ]);
     }
 }
+>>>>>>> main

@@ -3,17 +3,28 @@
 namespace App\Filament\Resources\RestructureApplications\Schemas;
 
 use Filament\Schemas\Schema;
+<<<<<<< HEAD
+=======
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use App\Models\LoanApplication;
 use App\Models\MemberDetail;
 use App\Models\LoanType;
+>>>>>>> main
 
 class RestructureApplicationsForm
 {
     public static function configure(Schema $schema): Schema
     {
+<<<<<<< HEAD
+        return $schema
+            ->components([
+                //
+            ]);
+    }
+}
+=======
         return $schema->components([
             Select::make('old_loan_application_id')
                 ->label('Select Existing Loan')
@@ -64,3 +75,4 @@ class RestructureApplicationsForm
         ])->columns(2);
     }
 }
+>>>>>>> main

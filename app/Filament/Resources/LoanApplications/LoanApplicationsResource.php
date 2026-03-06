@@ -32,6 +32,8 @@ class LoanApplicationsResource extends Resource
     protected static string|\UnitEnum|null $navigationGroup = 'Loan Management';
 
 
+    protected static string|\UnitEnum|null $navigationGroup = 'Loan Management';
+
    public static function form(Schema $schema): Schema
 {
     return $schema
@@ -298,4 +300,8 @@ class LoanApplicationsResource extends Resource
         \App\Filament\Resources\LoanApplications\RelationManagers\CashflowsRelationManager::class,
     ];
 }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> main

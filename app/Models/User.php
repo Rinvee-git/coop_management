@@ -13,10 +13,14 @@ use App\Models\Profile;
 use App\Models\StaffDetail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
+<<<<<<< HEAD
+=======
 use Illuminate\Support\Facades\Crypt;
+>>>>>>> main
 use Filament\Panel;
 use Filament\Models\Contracts\HasAvatar;
 use Laravel\Sanctum\HasApiTokens;
+use Filament\Models\Contracts\HasAvatar;
 
 class User extends Authenticatable implements HasAvatar
 {
@@ -24,6 +28,12 @@ class User extends Authenticatable implements HasAvatar
     use HasFactory, HasApiTokens, Notifiable, HasRoles;
 
     protected $primaryKey = 'user_id';
+<<<<<<< HEAD
+
+    public function getRouteKeyName(): string
+    {
+        return 'user_id';
+=======
     public $incrementing = false;
     protected $keyType = 'string';
 
@@ -41,11 +51,16 @@ class User extends Authenticatable implements HasAvatar
     {
         $decoded = base64_decode($value);
         return self::where('user_id', $decoded)->first();
+>>>>>>> main
     }
 
     public function getFilamentRecordKey(): int|string
     {
+<<<<<<< HEAD
+        return $this->user_id;
+=======
         return $this->encoded_id;
+>>>>>>> main
     }
 
     protected $fillable = [
@@ -139,10 +154,15 @@ class User extends Authenticatable implements HasAvatar
         return ! $this->hasRole('Member');
     }
 
+<<<<<<< HEAD
+    public $incrementing = false;
+    protected $keyType = 'string';
+=======
     public function canAccessBackOffice(): bool
     {
         return ! $this->isMember();
     }
+>>>>>>> main
 
     protected static function boot()
     {
@@ -169,4 +189,12 @@ class User extends Authenticatable implements HasAvatar
 
         return sprintf('%s-%s-%03d', $prefix, $year, $sequence);
     }
+<<<<<<< HEAD
+
+    public function canAccessBackOffice(): bool
+    {
+        return ! $this->isMember();
+    }
+=======
+>>>>>>> main
 }

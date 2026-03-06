@@ -26,16 +26,27 @@ public function type()
     return $this->belongsTo(\App\Models\LoanType::class, 'loan_type_id', 'loan_type_id');
 }
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> main
     protected $casts = [
         'amount_requested' => 'decimal:2',
         'submitted_at' => 'datetime',
         'approved_at' => 'datetime',
     ];
+<<<<<<< HEAD
+
+   public function member()
+{
+    return $this->belongsTo(\App\Models\MemberDetail::class, 'member_id', 'id');
+}
+=======
     public function payments()
     {
         return $this->hasMany(LoanPayment::class, 'loan_account_id', 'loan_account_id');
     }
+>>>>>>> main
 
 public function totalPaid()
     {

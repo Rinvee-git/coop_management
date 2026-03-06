@@ -32,6 +32,12 @@ class UserResource extends Resource
         return 'user_id';
     }
 
+<<<<<<< HEAD
+   public static function resolveRecordRouteBinding(string|int $key, ?\Closure $modifyQuery = null): ?\Illuminate\Database\Eloquent\Model
+    {
+        $decoded = \Illuminate\Support\Facades\Crypt::decryptString($key);
+        return static::getModel()::where('user_id', $decoded)->first();
+=======
     /**
      * Encrypt the user_id when building the URL.
      * e.g. /users/eyJpdiI6I.../edit
@@ -55,6 +61,7 @@ class UserResource extends Resource
         }
 
         return static::getModel()::where('user_id', $decrypted)->first() ?? abort(404);
+>>>>>>> main
     }
 
     public static function form(Schema $schema): Schema
@@ -75,9 +82,15 @@ class UserResource extends Resource
     public static function getPages(): array
     {
         return [
+<<<<<<< HEAD
+            'index' => ListUsers::route('/'),
+            // 'create' => CreateUser::route('/create'),
+            'edit' => EditUser::route('/{record}/edit'),
+=======
             'index'  => ListUsers::route('/'),
             // 'create' => CreateUser::route('/create'),
             'edit'   => EditUser::route('/{record}/edit'),
+>>>>>>> main
         ];
     }
 }

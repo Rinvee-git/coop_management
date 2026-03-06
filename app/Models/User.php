@@ -13,12 +13,11 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Models\Profile;
 use App\Models\StaffDetail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Storage;
 use Filament\Panel;
 use Laravel\Sanctum\HasApiTokens;
-use Filament\Models\Contracts\HasAvatar;
+use Illuminate\Support\Str;
 
-class User extends Authenticatable implements HasAvatar
+class User extends Authenticatable
 {
     /**
      * Used by Filament for user display name.
@@ -26,7 +25,7 @@ class User extends Authenticatable implements HasAvatar
      */
 
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, HasApiTokens, Notifiable, HasRoles;
+    use HasFactory, HasApiTokens, Notifiable,HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -36,14 +35,22 @@ class User extends Authenticatable implements HasAvatar
     protected $primaryKey = 'user_id';
 
     public function getRouteKeyName(): string
+        {
+            return 'encoded_id';
+        }
+    public function getEncodedIdAttribute(): string
     {
-        return 'user_id';
+        return \Illuminate\Support\Facades\Crypt::encryptString($this->user_id);
     }
-
+    public function resolveRouteBinding($value, $field = null): ?self
+        {
+            $decoded = base64_decode($value);
+            return self::where('user_id', $decoded)->first();
+        }
     public function getFilamentRecordKey(): int|string
-    {
-        return $this->user_id;
-    }
+        {
+            return $this->encoded_id;
+        }
 
     protected $fillable = [
         'username',
@@ -73,7 +80,7 @@ class User extends Authenticatable implements HasAvatar
         return ['password' => 'hashed'];
     }
 
-    public function profile()
+        public function profile()
     {
         return $this->belongsTo(Profile::class, 'profile_id', 'profile_id');
     }
@@ -94,13 +101,6 @@ class User extends Authenticatable implements HasAvatar
         return $key ? ('User #' . $key) : 'User';
     }
 
-    public function getFilamentAvatarUrl(): ?string
-    {
-        return $this->avatar
-            ? Storage::disk('public')->url($this->avatar)
-            : null;
-    }
-
     public function staffDetail()
     {
         return $this->hasOne(StaffDetail::class, 'profile_id', 'profile_id');
@@ -116,12 +116,14 @@ class User extends Authenticatable implements HasAvatar
         return $this->profile?->role?->name;
     }
 
+
     public function isStaff(): bool
     {
         return $this->staffDetail !== null;
     }
 
-    public function isAdmin(): bool
+
+   public function isAdmin(): bool
     {
         return $this->hasRole('Admin');
     }
@@ -142,7 +144,8 @@ class User extends Authenticatable implements HasAvatar
     }
 
     public function canAccessPanel(Panel $panel): bool
-    {
+     {
+        // if you only have one panel, just block Members here
         return ! $this->hasRole('Member');
     }
 
@@ -151,10 +154,10 @@ class User extends Authenticatable implements HasAvatar
 
     protected static function boot()
     {
-        parent::boot();
+       parent::boot();
 
         static::creating(function ($model) {
-            $model->coop_id = self::generateCoopId();
+            $model->coop_id = self::generateCoopId(); // 👈 generate coop_id, not id
         });
     }
 
@@ -176,7 +179,7 @@ class User extends Authenticatable implements HasAvatar
     }
 
     public function canAccessBackOffice(): bool
-    {
-        return ! $this->isMember();
-    }
+{
+    return ! $this->isMember(); // members should not access admin panel
+}
 }

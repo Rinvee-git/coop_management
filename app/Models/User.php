@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 use Filament\Panel;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Str;
 use Filament\Models\Contracts\HasAvatar;
 
 class User extends Authenticatable implements HasAvatar
@@ -37,22 +36,6 @@ class User extends Authenticatable implements HasAvatar
     protected $primaryKey = 'user_id';
 
     public function getRouteKeyName(): string
-        {
-            return 'encoded_id';
-        }
-    public function getEncodedIdAttribute(): string
-    {
-        return \Illuminate\Support\Facades\Crypt::encryptString($this->user_id);
-    }
-    public function resolveRouteBinding($value, $field = null): ?self
-        {
-            $decoded = base64_decode($value);
-            return self::where('user_id', $decoded)->first();
-        }
-    public function getFilamentRecordKey(): int|string
-        {
-            return $this->encoded_id;
-        }
     {
         return 'user_id';
     }

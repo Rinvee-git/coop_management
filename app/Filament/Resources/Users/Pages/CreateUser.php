@@ -24,13 +24,13 @@ class CreateUser extends CreateRecord
         // 3. Load profile relationship
         $user->load('profile');
 
-        // 4. Build plain text QR data
-        $qrData = implode("\n", [
-            'User ID  : ' . str_pad($user->user_id, 5, '0', STR_PAD_LEFT),
-            'Username : ' . $user->username,
-            'Profile  : ' . ($user->profile->full_name ?? 'N/A'),
-            'Coop ID  : ' . $user->coop_id,
-            'Status   : Active',
+        // 4. Build JSON QR data
+        $qrData = json_encode([
+            'user_id'  => $user->user_id,
+            'coop_id'  => $user->coop_id,
+            'username' => $user->username,
+            'profile'  => $user->profile->full_name ?? 'N/A',
+            'status'   => 'Active',
         ]);
 
         // 5. Generate QR Code as SVG
@@ -43,7 +43,7 @@ class CreateUser extends CreateRecord
         $filename = 'qrcodes/user_' . $user->user_id . '.svg';
         Storage::disk('public')->put($filename, $qrCode);
 
-        // 7. Update user record with QR path and coop_id
+        // 7. Update user record
         $user->update(['qr_code' => $filename]);
 
         return $user;

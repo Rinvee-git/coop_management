@@ -15,13 +15,13 @@ class UserQrCodeSeeder extends Seeder
 
         foreach ($users as $user) {
 
-            // Plain text encoded into QR
-            $qrData = implode("\n", [
-                'User ID  : ' . str_pad($user->user_id, 5, '0', STR_PAD_LEFT),
-                'Username : ' . $user->username,
-                'Profile  : ' . ($user->profile->full_name ?? 'N/A'),
-                'Coop ID  : ' . ($user->coop_id ?? 'N/A'),
-                'Status   : Active',
+            // Build JSON QR data
+            $qrData = json_encode([
+                'user_id'  => $user->user_id,
+                'coop_id'  => $user->coop_id ?? 'N/A',
+                'username' => $user->username,
+                'profile'  => $user->profile->full_name ?? 'N/A',
+                'status'   => 'Active',
             ]);
 
             // Generate QR Code as SVG

@@ -20,6 +20,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
@@ -34,62 +35,72 @@ class AdminPanelProvider extends PanelProvider
             ->path('coop')
             ->login()
 
-            // ── Branding (dynamic from SystemSettings) ─────────────────
+            // ── Branding ─────────────────────────────
             ->brandLogo(fn () => view('filament.brand'))
             ->brandLogoHeight('2rem')
+
             ->favicon(function () {
+
+                // Prevent crash during migrations
+                if (!Schema::hasTable('system_settings')) {
+                    return asset('images/my-logo.svg');
+                }
+
                 $favicon = SystemSetting::get('favicon');
+
                 return $favicon
                     ? Storage::disk('public')->url($favicon)
                     : asset('images/my-logo.svg');
             })
 
-            // ── Topbar username render hook ─────────────────────────────
+            // ── Topbar username render hook ───────────
             ->renderHook(
                 PanelsRenderHook::USER_MENU_BEFORE,
                 fn () => view('filament.topbar-username'),
             )
 
-            // ── Plugins ────────────────────────────────────────────────
+            // ── Plugins ───────────────────────────────
             ->plugins([
                 FilamentShieldPlugin::make()
                     ->gridColumns([
                         'default' => 1,
-                        'sm'      => 2,
-                        'lg'      => 3,
+                        'sm' => 2,
+                        'lg' => 3,
                     ])
                     ->sectionColumnSpan(1)
                     ->checkboxListColumns([
                         'default' => 1,
-                        'sm'      => 2,
-                        'lg'      => 4,
+                        'sm' => 2,
+                        'lg' => 4,
                     ])
                     ->resourceCheckboxListColumns([
                         'default' => 1,
-                        'sm'      => 2,
+                        'sm' => 2,
                     ]),
             ])
 
-            // ── Primary color (dynamic from SystemSettings) ─────────────
+            // ── Primary Color ─────────────────────────
             ->colors([
                 'primary' => Color::hex(
-                    SystemSetting::get('primary_color', '#0d9488')
+                    Schema::hasTable('system_settings')
+                        ? SystemSetting::get('primary_color', '#0d9488')
+                        : '#0d9488'
                 ),
             ])
 
-            // ── Resources, Pages, Widgets ───────────────────────────────
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
+            // ── Resources, Pages, Widgets ─────────────
+            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
+            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 AccountWidget::class,
                 FilamentInfoWidget::class,
             ])
 
-            // ── Middleware ──────────────────────────────────────────────
+            // ── Middleware ────────────────────────────
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -101,6 +112,7 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+
             ->authMiddleware([
                 Authenticate::class,
             ]);

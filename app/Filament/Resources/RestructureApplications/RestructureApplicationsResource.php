@@ -12,6 +12,8 @@ use App\Models\RestructureApplication;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use BackedEnum;
+use Filament\Forms\Components\Select;
+use App\Models\MemberDetail;
 
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
@@ -25,8 +27,7 @@ class RestructureApplicationsResource extends Resource
 
     protected static ?string $navigationLabel = 'Restructure Applications';
     protected static string|\UnitEnum|null $navigationGroup = 'Loan Management';
-    protected static ?string $recordTitleAttribute = 'id';
-
+    protected static ?string $recordTitleAttribute = 'restructure_application_id';
     public static function form(Schema $schema): Schema
     {
         return RestructureApplicationsForm::configure($schema);
@@ -38,26 +39,17 @@ class RestructureApplicationsResource extends Resource
     }
 
 
-    public function loanPayments()
+ 
+public static function getEloquentQuery(): Builder
 {
-    return $this->hasMany(LoanPayment::class, 'loan_application_id', 'loan_application_id');
-}
-   public static function getEloquentQuery(): Builder
-{
-    return parent::getEloquentQuery()
-        ->where('status', 'approved')
-        ->whereHas('loanPayments', function (Builder $query) {
-            $query->selectRaw('loan_application_id, SUM(principal_paid) as total_paid')
-                  ->groupBy('loan_application_id')
-                  ->havingRaw('total_paid >= (SELECT amount_requested FROM loan_applications WHERE loan_applications.loan_application_id = loan_payments.loan_application_id) * 0.5');
-        });
+    return parent::getEloquentQuery();
 }
     public static function getPages(): array
     {
         return [
-            'index' => ListRestructureApplications::route('/'),
-            'create' => CreateRestructureApplications::route('/create'),
-            'edit' => EditRestructureApplications::route('/{record}/edit'),
+            'index' => Pages\ListRestructureApplications::route('/'),
+            'create' => Pages\CreateRestructureApplications::route('/create'),
+            'edit' => Pages\EditRestructureApplications::route('/{record}/edit'),
         ];
     }
 

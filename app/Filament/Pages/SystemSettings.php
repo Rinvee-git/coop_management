@@ -135,8 +135,7 @@ class SystemSettings extends Page
 
     public function save(): void
     {
-        // FileUpload stores to disk automatically when the form is submitted
-        // but we need to get the stored path correctly
+
         $logo    = is_array($this->logo)    ? ($this->logo[0]    ?? null) : ($this->logo    ?: null);
         $favicon = is_array($this->favicon) ? ($this->favicon[0] ?? null) : ($this->favicon ?: null);
 
